@@ -1,16 +1,16 @@
-name: 'Run rubocop with reviewdog'
-description: '🐶 Run rubocop with reviewdog on pull requests to improve code review experience.'
+name: 'Run standardrb with reviewdog'
+description: '🐶 Run standardrb with reviewdog on pull requests to improve code review experience.'
 author: 'mgrachev (reviewdog)'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN.'
     required: true
   rubocop_flags:
-    description: 'rubocop flags. (rubocop <rubocop_flags>)'
+    description: 'standardrb flags. (standardrb <rubocop_flags>)'
     default: ''
   tool_name:
     description: 'Tool name to use for reviewdog reporter'
-    default: 'rubocop'
+    default: 'standardrb'
   level:
     description: 'Report level for reviewdog [info,warning,error]'
     default: 'error'
@@ -32,17 +32,21 @@ inputs:
       Default is `true`.
     default: 'true'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.github_token }}
-    - ${{ inputs.rubocop_flags }}
-    - ${{ inputs.tool_name }}
-    - ${{ inputs.level }}
-    - ${{ inputs.reporter }}
-    - ${{ inputs.rubocop_version }}
-    - ${{ inputs.rubocop_extensions }}
-    - ${{ inputs.standard_version }}
+  using: 'composite'
+  steps:
+    - run: $GITHUB_ACTION_PATH/script.sh
+      shell: bash
+      env:
+        REVIEWDOG_VERSION: v0.15.0
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_RUBOCOP_FLAGS: ${{ inputs.rubocop_flags }}
+        INPUT_TOOL_NAME: ${{ inputs.tool_name }}
+        INPUT_LEVEL: ${{ inputs.level }}
+        INPUT_REPORTER: ${{ inputs.reporter }}
+        INPUT_RUBOCOP_VERSION: ${{ inputs.rubocop_version }}
+        INPUT_STANDARD_VERSION: ${{ inputs.standard_version }}
+        INPUT_RUBOCOP_EXTENSIONS: ${{ inputs.rubocop_extensions }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
 branding:
   icon: 'check-circle'
   color: 'red'
