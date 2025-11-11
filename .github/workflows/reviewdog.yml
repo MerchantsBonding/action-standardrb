@@ -4,6 +4,7 @@ jobs:
   hadolint:
     name: runner / hadolint
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Check out code
         uses: actions/checkout@v1

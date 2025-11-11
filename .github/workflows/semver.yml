@@ -8,6 +8,7 @@ on:
 jobs:
   update-semver:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v1
       - uses: haya14busa/action-update-semver@v1
